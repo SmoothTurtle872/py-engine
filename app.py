@@ -26,7 +26,7 @@ class App:
         while self.running:
             if len(self.main_functions) > 0:
                 for func in self.main_functions:
-                    func()
+                    func(self)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

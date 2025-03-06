@@ -3,7 +3,7 @@ from app import App
 APP = App((960,540))
 
 @APP.main
-def test():
-    print("YAY")
+def test(app:App):
+    print(app.width)
 
 APP.run()
