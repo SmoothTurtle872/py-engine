@@ -5,7 +5,7 @@ from pyengine.types.rect import Rect
 
 class App:
 
-    __slots__ = "width", "height", "running", "WIN", "FPS", "main_functions", "on_key_press"
+    __slots__ = "width", "height", "running", "WIN", "FPS", "main_functions", "on_key_press", "on_init"
     width: int
     height: int
     running: bool
@@ -14,8 +14,9 @@ class App:
     FPS: int
     CLOCK: pygame.time.Clock = pygame.time.Clock()
 
-    main_functions:set[callable]
-    mon_key_press:set[callable]
+    main_functions: set[callable]
+    on_key_press: set[callable]
+    on_init: set[callable]
 
     def __init__(self, win_size: tuple[int, int], FPS: int = 30) -> None:
         pygame.init()
@@ -29,6 +30,7 @@ class App:
 
         self.main_functions = set()
         self.on_key_press = set()
+        self.on_init = set()
 
     def main(self, func) -> callable:
         self.main_functions.add(func)
@@ -36,6 +38,10 @@ class App:
 
     def onKeyPress(self, func) -> callable:
         self.on_key_press.add(func)
+        return func
+
+    def onInit(self, func) -> callable:
+        self.on_init.add(func)
         return func
 
     def render(self, renderable: Rect) -> None:
@@ -56,6 +62,9 @@ class App:
         self.WIN.fill(color)
 
     def run(self) -> None:
+        if len(self.on_init) > 0:
+            for func in self.on_init:
+                func(self)
         self.running = True
         while self.running:
             self.CLOCK.tick(self.FPS)

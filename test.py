@@ -4,7 +4,6 @@ from pyengine import App
 from pyengine import Rect
 
 APP = App((960,540))
-print("APP INITIALIZED")
 test = Rect((0,0),(10,10),pygame.Color(255,0,0,255))
 
 @APP.onKeyPress
@@ -34,6 +33,10 @@ def onPress(app, keys):
 def main(app):
     app.clearScreen()
     app.render(test)
+
+@APP.onInit
+def init(app):
+    print("INITIALIZED APP")
 
 
 APP.run()
