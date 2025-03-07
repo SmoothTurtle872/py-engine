@@ -5,7 +5,7 @@ from pyengine.types.rect import Rect
 
 class App:
 
-    __slots__ = "width", "height", "running", "WIN", "FPS", "main_functions", "on_key_press", "on_init"
+    __slots__ = "width", "height", "running", "WIN", "FPS", "main_functions", "on_key_press", "on_init", "on_click"
     width: int
     height: int
     running: bool
@@ -17,6 +17,7 @@ class App:
     main_functions: set[callable]
     on_key_press: set[callable]
     on_init: set[callable]
+    on_click: set[callable]
 
     def __init__(self, win_size: tuple[int, int], FPS: int = 30) -> None:
         pygame.init()
@@ -31,6 +32,9 @@ class App:
         self.main_functions = set()
         self.on_key_press = set()
         self.on_init = set()
+        self.on_click = set()
+
+    # Decorators
 
     def main(self, func) -> callable:
         self.main_functions.add(func)
@@ -43,6 +47,17 @@ class App:
     def onInit(self, func) -> callable:
         self.on_init.add(func)
         return func
+
+    def onClick(self, func) -> callable:
+        self.on_click.add(func)
+        return func
+
+    # Properties
+    @property
+    def mousePos(self) -> tuple[int,int]:
+        return pygame.mouse.get_pos()
+
+    # Functions to be run by user
 
     def render(self, renderable: Rect) -> None:
         """
@@ -73,10 +88,16 @@ class App:
                     func(self)
 
             keys = pygame.key.get_pressed()
-            if len(keys) > 1:
+            if keys.count(True) > 0:
                 if len(self.on_key_press) > 0:
                     for func in self.on_key_press:
                         func(self, keys)
+
+            mouse_pressed = pygame.mouse.get_pressed()
+            if True in set(mouse_pressed):
+                if len(self.on_click) > 0:
+                    for func in self.on_click:
+                        func(self, mouse_pressed)
 
             pygame.display.update()
 

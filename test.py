@@ -1,4 +1,5 @@
 import pygame
+from pygame import Color
 
 from pyengine import App
 from pyengine import Rect
@@ -27,6 +28,15 @@ def onPress(app, keys):
         test.rect.y = 0
     elif test.y + test.height > app.height:
         test.rect.y = app.height - test.height
+
+@APP.onClick
+def onClick(app, mouseBTNS):
+    if mouseBTNS[0]:
+        test.color = Color(255,0,0,255)
+    elif mouseBTNS[1]:
+        test.color = Color(0,255,0,255)
+    elif mouseBTNS[2]:
+        test.color = Color(0,0,255,255)
 
 
 @APP.main
