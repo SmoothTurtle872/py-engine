@@ -57,8 +57,8 @@ class App:
         self.on_click.add(func)
         return func
 
-    def onEvent(self, func):
-        def inner(event_type):
+    def onEvent(self, event_type):
+        def inner(func):
             self.on_event[event_type] = func
             return func
         return inner
