@@ -3,6 +3,7 @@ from pygame import Color
 
 from pyengine import App
 from pyengine import Rect
+from pyengine.events import Event
 
 APP = App((960,540))
 test = Rect((0,0),(10,10),pygame.Color(255,0,0,255))
@@ -33,6 +34,7 @@ def onPress(app, keys):
 def onClick(app, mouseBTNS):
     if mouseBTNS[0]:
         test.color = Color(255,0,0,255)
+        app.sendEvent(Event(2,None))
     elif mouseBTNS[1]:
         test.color = Color(0,255,0,255)
     elif mouseBTNS[2]:
@@ -47,6 +49,10 @@ def main(app):
 @APP.onInit
 def init(app):
     print("INITIALIZED APP")
+
+@APP.onEvent(2)
+def on_test(app, data):
+    print(data)
 
 
 APP.run()
