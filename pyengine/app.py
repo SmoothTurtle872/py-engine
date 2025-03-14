@@ -51,22 +51,51 @@ class App:
     # Decorators
 
     def main(self, func) -> callable:
+        """
+        Decorate a function with this to define a main function.
+        Main functions will be run once every loop of the app after ``APP.run()`` is run
+        where APP is the instance of the App class
+        The app will be provided as an argument
+        """
         self.main_functions.add(func)
         return func
 
     def onKeyPress(self, func) -> callable:
+        """
+        Decorate a function with this to define an on key press function.
+        On key press functions will be run whenever a user has a key pressed
+        The app and pressed keys will be provided in 2 arguments
+        """
         self.on_key_press.add(func)
         return func
 
     def onInit(self, func) -> callable:
+        """
+        Decorate a function with this to define an init function.
+        Init functions will be run once on initialisation of the app after ``APP.run()`` is run
+        where APP is the instance of the App class
+        The app will be provided as an argument
+        """
         self.on_init.add(func)
         return func
 
     def onClick(self, func) -> callable:
+        """
+        Decorate a function with this to define an on mouse press function.
+        On mouse press functions will be run whenever a user has a mouse button pressed
+        The app and pressed mouse buttons will be provided in 2 arguments
+        """
         self.on_click.add(func)
         return func
 
     def onEvent(self, event_type):
+        """
+        Decorate a function with this to define an event function.
+        Event functions will be run whenever the specified event is run
+        The app and event data will be provided in 2 arguments
+
+        :param event_type: The event being tested for
+        """
         def inner(func):
             self.on_event[event_type] = func
             return func
