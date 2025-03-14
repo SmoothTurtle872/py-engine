@@ -47,7 +47,7 @@ def onPress(app, keys):
 def onClick(app, mouseBTNS):
     if mouseBTNS[0]:
         test.color = Color(255,0,0,255)
-        app.sendEvent(Event(2,None))
+        app.sendEvent(2)
     elif mouseBTNS[1]:
         test.color = Color(0,255,0,255)
     elif mouseBTNS[2]:
@@ -65,7 +65,7 @@ def init(app):
 
 @APP.onEvent(2)
 def on_test(app, data):
-    print(app.mousePos)
+    print(data)
 
 @APP.onEvent(1)
 def on_test(app, data):

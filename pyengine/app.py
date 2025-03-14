@@ -1,5 +1,9 @@
+from types import NoneType
+
 import pygame
 from pygame import Surface
+
+import time
 
 from pyengine.types.rect import Rect
 from pyengine.events import Event
@@ -75,8 +79,15 @@ class App:
         return pygame.mouse.get_pos()
 
     # Functions to be run by user
-    def sendEvent(self, event:Event):
-        self.events.add(event)
+    def sendEvent(self, event:int, data: None|list = None):
+        """
+        Sends an event
+        :param event: The event type, a list of them can be found by importing ``pyengine.events``
+        :param data: The data to be sent with the event, always includes a timestamp
+        :return:
+        """
+        event_data: tuple = (time.time(),data)
+        self.events.add(Event(event, event_data))
 
     def render(self, renderable: Rect) -> None:
         """
@@ -122,7 +133,7 @@ class App:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.sendEvent(Event(events.QUIT))
+                    self.sendEvent(events.QUIT)
 
             if len(self.events) > 0:
                 for event in self.events:
