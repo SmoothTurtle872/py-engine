@@ -5,8 +5,21 @@ from pyengine import App
 from pyengine import Rect
 from pyengine.events import Event
 
-APP = App((960,540))
+APP = App((960,540), auto_quit=False)
 test = Rect((0,0),(10,10),pygame.Color(255,0,0,255))
+
+QUIT_RESPONSES = {0:"LOL! No more quitting!",
+                  1:"I told you you won't be quitting",
+                  2:"Please stop pressing the quit button",
+                  3:"Windows is asking questions now",
+                  4:"You really want to quit?",
+                  5:"Why?",
+                  6:"Please, don't kill me",
+                  7:"I hear dying processes all the time, it's going to hurt",
+                  8:"Fine if you really hate me",
+                  9:"Goodbye..."}
+
+quit_count = 0
 
 @APP.onKeyPress
 def onPress(app, keys):
@@ -48,11 +61,20 @@ def main(app):
 
 @APP.onInit
 def init(app):
-    print("INITIALIZED APP")
+    print("Hello")
 
 @APP.onEvent(2)
 def on_test(app, data):
-    print(data)
+    print(app.mousePos)
+
+@APP.onEvent(1)
+def on_test(app, data):
+    global quit_count
+    if quit_count < 10:
+        print(QUIT_RESPONSES[quit_count])
+        quit_count += 1
+    else:
+        app.running = False
 
 
 APP.run()
