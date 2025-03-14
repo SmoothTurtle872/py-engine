@@ -1,5 +1,3 @@
-from types import NoneType
-
 import pygame
 from pygame import Surface
 
@@ -51,22 +49,51 @@ class App:
     # Decorators
 
     def main(self, func) -> callable:
+        """
+        Decorate a function with this to define a main function.
+        Main functions will be run once every loop of the app after ``APP.run()`` is run
+        where APP is the instance of the App class
+        The app will be provided as an argument
+        """
         self.main_functions.add(func)
         return func
 
     def onKeyPress(self, func) -> callable:
+        """
+        Decorate a function with this to define an on key press function.
+        On key press functions will be run whenever a user has a key pressed
+        The app and pressed keys will be provided in 2 arguments
+        """
         self.on_key_press.add(func)
         return func
 
     def onInit(self, func) -> callable:
+        """
+        Decorate a function with this to define an init function.
+        Init functions will be run once on initialisation of the app after ``APP.run()`` is run
+        where APP is the instance of the App class
+        The app will be provided as an argument
+        """
         self.on_init.add(func)
         return func
 
     def onClick(self, func) -> callable:
+        """
+        Decorate a function with this to define an on mouse press function.
+        On mouse press functions will be run whenever a user has a mouse button pressed
+        The app and pressed mouse buttons will be provided in 2 arguments
+        """
         self.on_click.add(func)
         return func
 
     def onEvent(self, event_type):
+        """
+        Decorate a function with this to define an event function.
+        Event functions will be run whenever the specified event is run
+        The app and event data will be provided in 2 arguments
+
+        :param event_type: The event being tested for
+        """
         def inner(func):
             self.on_event[event_type] = func
             return func
@@ -76,15 +103,18 @@ class App:
     # Properties
     @property
     def mousePos(self) -> tuple[int,int]:
+        """
+        The mouse position on the window
+        :return: A tuple containing 2 ints being the x and y of the mouse position
+        """
         return pygame.mouse.get_pos()
 
     # Functions to be run by user
-    def sendEvent(self, event:int, data: None|list = None):
+    def sendEvent(self, event:int, data: None|list = None) -> None:
         """
         Sends an event
         :param event: The event type, a list of them can be found by importing ``pyengine.events``
         :param data: The data to be sent with the event, always includes a timestamp
-        :return:
         """
         event_data: tuple = (time.time(),data)
         self.events.add(Event(event, event_data))
@@ -93,7 +123,6 @@ class App:
         """
         Renders a renderable onto the screen
         :param renderable: The object to be rendered ``pyengine.types.rect.Rect``
-        :return:
         """
         if type(renderable) == Rect:
             pygame.draw.rect(self.WIN,renderable.color,renderable.rect)
@@ -102,11 +131,15 @@ class App:
         """
         Fills the screen with a specific color
         :param color: The color to fill the screen with ``pygame.color``
-        :return:
         """
         self.WIN.fill(color)
 
     def run(self) -> None:
+        """
+        Runs the app, init functions are run then a loop is begun until stopped.
+        Main functions, key pressed functions, mouse pressed functions and event functions are run in this loop
+        The screen is updated at the end of this loop but before events are processed
+        """
         if len(self.on_init) > 0:
             for func in self.on_init:
                 func(self)

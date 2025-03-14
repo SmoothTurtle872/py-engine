@@ -1,6 +1,15 @@
 import pygame
 
 class Rect:
+    """
+    A representation of a rectangle
+
+    :param pos: the position the rectangle starts as
+    :param size: the size of the rectangle
+    :param color: the color of the rectangle
+
+    This class stores a pygame rectangle and a pygame color as 2 attributes for this representation
+    """
     rect: pygame.Rect
     color: pygame.Color
 
