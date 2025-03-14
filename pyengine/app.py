@@ -105,15 +105,18 @@ class App:
     # Properties
     @property
     def mousePos(self) -> tuple[int,int]:
+        """
+        The mouse position on the window
+        :return: A tuple containing 2 ints being the x and y of the mouse position
+        """
         return pygame.mouse.get_pos()
 
     # Functions to be run by user
-    def sendEvent(self, event:int, data: None|list = None):
+    def sendEvent(self, event:int, data: None|list = None) -> None:
         """
         Sends an event
         :param event: The event type, a list of them can be found by importing ``pyengine.events``
         :param data: The data to be sent with the event, always includes a timestamp
-        :return:
         """
         event_data: tuple = (time.time(),data)
         self.events.add(Event(event, event_data))
@@ -122,7 +125,6 @@ class App:
         """
         Renders a renderable onto the screen
         :param renderable: The object to be rendered ``pyengine.types.rect.Rect``
-        :return:
         """
         if type(renderable) == Rect:
             pygame.draw.rect(self.WIN,renderable.color,renderable.rect)
@@ -131,11 +133,15 @@ class App:
         """
         Fills the screen with a specific color
         :param color: The color to fill the screen with ``pygame.color``
-        :return:
         """
         self.WIN.fill(color)
 
     def run(self) -> None:
+        """
+        Runs the app, init functions are run then a loop is begun until stopped.
+        Main functions, key pressed functions, mouse pressed functions and event functions are run in this loop
+        The screen is updated at the end of this loop but before events are processed
+        """
         if len(self.on_init) > 0:
             for func in self.on_init:
                 func(self)
